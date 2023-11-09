@@ -1,11 +1,9 @@
-class Felhasznalo:
-    pass
 
 class Jelszo:
     jelszo = "valami"
-    def __init__(self):
-        #self.jelszo_generalasa()
-        pass
+    def __init__(self, jelszo):
+        self.jelszo = jelszo
+
     def jelszo_kerese(self):
         pass
 
@@ -27,4 +25,16 @@ class Jelszo:
             jelszo = jelszo + karaktersor[random.randint(0, len(karaktersor) - 1)]
         self.jelszo = jelszo
 
+class Felhasznalo(Jelszo):
+    email = "alhf"
+    def __init__(self, email, jelszo):
+        super().__init__(jelszo)
+        self.email = email
 
+
+if __name__ == "__main__":
+    fhsz = Felhasznalo("asdf@aew.hu", "valami jelszó")
+    print(fhsz.email)
+    print(fhsz.jelszo)
+    fhsz.jelszo_generalasa()
+    print(fhsz.jelszo)

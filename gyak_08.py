@@ -4,19 +4,31 @@ import gyak_09
 
 def belepes_ablak():
     def ok_gomb_kezelese():
-        belepes.destroy()
+        if fNev.get() == "" or fJelszo.get() == "":
+            messagebox.showerror("Hiba", "Nem lehet üres egyik adatmező sem!")
+        elif " " in fNev.get() or "@" not in fNev.get() or "." not in fNev.get():
+            messagebox.showerror("Hiba", "Nem megfelelő az email formátuma!")
+        else:
+            print(fNev.get())
+            print(fJelszo.get())
+            belepes.destroy()
 
     def reg_gomb_kezelese():
         belepes.destroy()
+        reg_ablak()
 
-    belepes = Tk()
+    belepes = Toplevel()
     belepes.title("Felhasználó beléptetése")
 
     felh_nev_cimke = Label(belepes, text="Felhaszmnáló neve (email):")
     felh_jelszo_cimke = Label(belepes, text="Jelszó:")
 
-    felh_nev = Entry(belepes, width=30)
-    felh_jelszo = Entry(belepes, width=20)
+    fNev = StringVar()
+    fNev.set("")
+    felh_nev = Entry(belepes, textvariable=fNev, width=30)
+    fJelszo = StringVar()
+    fJelszo.set("")
+    felh_jelszo = Entry(belepes, textvariable=fJelszo, width=20)
 
     gomb_ok = Button(belepes, text="OK", command=ok_gomb_kezelese, width=10)
     gomb_reg = Button(belepes, text="Regisztráció", command=reg_gomb_kezelese)
@@ -32,27 +44,35 @@ def belepes_ablak():
 
 def reg_ablak():
     def ok_gomb_kezelese():
-        if jsz.get() == jsz2.get():
-            regisztracio.destroy()
-        else:
+        if jsz.get() != jsz2.get():
             messagebox.showerror("Hiba", "Nem egyezik a két jelszó")
+        elif " " in fhEmail.get() or "@" not in fhEmail.get() or "." not in fhEmail.get():
+            messagebox.showerror("Hiba", "Nem megfelelő az email formátuma!")
+        else:
+            fhsz.email = fhEmail.get()
+            fhsz.jelszo = jsz.get()
+            print(fhsz.email)
+            print(fhsz.jelszo)
+            regisztracio.destroy()
 
     def jelszo_gomb_kezelese():
-        pw.jelszo_generalasa()
-        jsz.set(pw.jelszo)
-        jsz2.set(pw.jelszo)
+        fhsz.jelszo_generalasa()
+        jsz.set(fhsz.jelszo)
+        jsz2.set(fhsz.jelszo)
 
 
-    pw = gyak_09.Jelszo()
+    fhsz = gyak_09.Felhasznalo("", "")
 
-    regisztracio = Tk()
+    regisztracio = Toplevel()
     regisztracio.title("Regisztráció")
 
     felh_nev_cimke = Label(regisztracio, text="Felhasználó neve (email):")
     felh_jelszo_cimke =Label(regisztracio, text="Jelszó:")
     felh_jelszo2_cimke = Label(regisztracio, text="A jelszó ismét:")
 
-    felh_nev = Entry(regisztracio, width=30)
+    fhEmail = StringVar()
+    fhEmail.set("")
+    felh_nev = Entry(regisztracio, textvariable=fhEmail, width=30)
     jsz = StringVar()
     jsz.set("")
     felh_jelszo = Entry(regisztracio, textvariable=jsz, width=20)
@@ -74,5 +94,28 @@ def reg_ablak():
 
     regisztracio.mainloop()
 
-#belepes_ablak()
-reg_ablak()
+def lista():
+    pass
+
+def nevjegy():
+    messagebox.showinfo("Névjegy", "Dolgozói nyilvántartás\nKészült: 2023\nKészítette: UNIDUNA")
+
+app = Tk()
+app.title("Dolgozók nyilvántartása")
+app.minsize(300, 300)
+
+menusor = Menu(app)
+
+hozzaferes = Menu(menusor)
+hozzaferes.add_command(label="Belépés", command=belepes_ablak)
+hozzaferes.add_command(label="Regisztráció", command=reg_ablak)
+hozzaferes.add_command(label="Kilépés", command=app.destroy)
+menusor.add_cascade(label="Hozzáférés", menu=hozzaferes)
+
+dolgozok = Menu(menusor)
+dolgozok.add_command(label="Lista", command=lista)
+dolgozok.add_command(label="Névjegy", command=nevjegy)
+menusor.add_cascade(label="Dolgozók", menu=dolgozok)
+
+app.config(menu=menusor)
+app.mainloop()
