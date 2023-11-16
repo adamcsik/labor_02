@@ -7,8 +7,39 @@ class Jelszo:
     def jelszo_kerese(self):
         pass
 
-    def jelszo_ellemorzese(self):
-        pass
+    def jelszo_ellemorzese(self, jelszo):
+        ok_jelszo = True
+        while ok_jelszo:
+            van = 0
+            if len(jelszo) < 8:
+                ok_jelszo = False
+
+            for i in range(len(jelszo)):
+                if jelszo[i].isnumeric():
+                    van += 1
+            if van == 0:
+                ok_jelszo = False
+
+            van = 0
+            for i in range(len(jelszo)):
+                if jelszo[i].isupper():
+                    van += 1
+            if van == 0:
+                ok_jelszo = False
+
+            van = 0
+            for i in range(len(jelszo)):
+                if jelszo[i].islower():
+                    van += 1
+            if van == 0:
+                ok_jelszo = False
+
+            if not ok_jelszo:
+                #jelszo = input("Nem megfelelő a jelszó!!!\nKérek egy jelszót (1,a,A, min 8 karakter): ")
+                ok_jelszo = True
+            else:
+                ok_jelszo = False
+        return ok_jelszo
 
     def jelszo_generalasa(self, hossz=10, kisbetu=True, nagybetu=True, szam=True):
         import string

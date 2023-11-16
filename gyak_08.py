@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import gyak_09
+from gyak_11 import *
 
 def belepes_ablak():
     def ok_gomb_kezelese():
@@ -9,8 +10,10 @@ def belepes_ablak():
         elif " " in fNev.get() or "@" not in fNev.get() or "." not in fNev.get():
             messagebox.showerror("Hiba", "Nem megfelelő az email formátuma!")
         else:
-            print(fNev.get())
-            print(fJelszo.get())
+            if ab_belepes(fNev.get()) == fJelszo.get():
+                messagebox.showinfo("Belépés", "Üdv a fedélzeten!")
+            else:
+                messagebox.showerror("Belépés", "Nincs regisztrálva vagy nem jó a jelszó!")
             belepes.destroy()
 
     def reg_gomb_kezelese():
@@ -28,7 +31,7 @@ def belepes_ablak():
     felh_nev = Entry(belepes, textvariable=fNev, width=30)
     fJelszo = StringVar()
     fJelszo.set("")
-    felh_jelszo = Entry(belepes, textvariable=fJelszo, width=20)
+    felh_jelszo = Entry(belepes, textvariable=fJelszo, width=20, show="*")
 
     gomb_ok = Button(belepes, text="OK", command=ok_gomb_kezelese, width=10)
     gomb_reg = Button(belepes, text="Regisztráció", command=reg_gomb_kezelese)
@@ -46,13 +49,18 @@ def reg_ablak():
     def ok_gomb_kezelese():
         if jsz.get() != jsz2.get():
             messagebox.showerror("Hiba", "Nem egyezik a két jelszó")
+            regisztracio.attributes('-topmost', True)
+            regisztracio.attributes('-topmost', False)
+        elif fhsz.jelszo_ellemorzese(jsz.get()):
+            messagebox.showerror("Hiba", "Nem megfelelő jelszót választott!")
+            regisztracio.attributes('-topmost', True)
+            regisztracio.attributes('-topmost', False)
         elif " " in fhEmail.get() or "@" not in fhEmail.get() or "." not in fhEmail.get():
             messagebox.showerror("Hiba", "Nem megfelelő az email formátuma!")
+            regisztracio.attributes('-topmost', True)
+            regisztracio.attributes('-topmost', False)
         else:
-            fhsz.email = fhEmail.get()
-            fhsz.jelszo = jsz.get()
-            print(fhsz.email)
-            print(fhsz.jelszo)
+            ab_rogzites(fhEmail.get(), jsz.get())
             regisztracio.destroy()
 
     def jelszo_gomb_kezelese():
@@ -75,10 +83,10 @@ def reg_ablak():
     felh_nev = Entry(regisztracio, textvariable=fhEmail, width=30)
     jsz = StringVar()
     jsz.set("")
-    felh_jelszo = Entry(regisztracio, textvariable=jsz, width=20)
+    felh_jelszo = Entry(regisztracio, textvariable=jsz, width=20, show="*")
     jsz2 = StringVar()
     jsz2.set("")
-    felh_jelszo2 = Entry(regisztracio, textvariable=jsz2, width=20)
+    felh_jelszo2 = Entry(regisztracio, textvariable=jsz2, width=20, show="*")
 
     gomb_ok = Button(regisztracio, text="OK", command=ok_gomb_kezelese, width=15)
     gomb_jelszo = Button(regisztracio, text="Jelszó generálása!", command=jelszo_gomb_kezelese)
@@ -100,9 +108,12 @@ def lista():
 def nevjegy():
     messagebox.showinfo("Névjegy", "Dolgozói nyilvántartás\nKészült: 2023\nKészítette: UNIDUNA")
 
+# a main program
 app = Tk()
 app.title("Dolgozók nyilvántartása")
 app.minsize(300, 300)
+
+ab_letrehozas()
 
 menusor = Menu(app)
 
@@ -119,3 +130,5 @@ menusor.add_cascade(label="Dolgozók", menu=dolgozok)
 
 app.config(menu=menusor)
 app.mainloop()
+
+ab_lezaras()
